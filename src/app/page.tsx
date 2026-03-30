@@ -1,65 +1,74 @@
-import Image from "next/image";
+"use client";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { Activity, Shield, Cpu } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    // Reveal animation
+    gsap.from(".reveal", {
+      y: 30,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.2,
+      ease: "power4.out",
+    });
+  }, []);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main
+      ref={containerRef}
+      className="min-h-screen bg-[#050505] text-white flex flex-col items-center justify-center relative overflow-hidden"
+    >
+      {/* Dynamic Grid Background */}
+      <div className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+
+      <div className="z-10 text-center px-4">
+        <div className="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border border-green-500/30 bg-green-500/5 text-green-400 text-xs font-mono mb-6">
+          <Activity size={14} className="animate-pulse" />
+          SYSTEM_STATUS: OPERATIONAL
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        <h1 className="reveal text-7xl md:text-9xl font-black tracking-tighter mb-4 italic uppercase">
+          LOG
+          <span className="text-green-500 underline decoration-2 underline-offset-8">
+            PULSE
+          </span>
+        </h1>
+
+        <p className="reveal text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-mono">
+          {`>_`} Monitor errors at the speed of thought. Low latency
+          observability for modern stacks.
+        </p>
+
+        <div className="reveal flex flex-wrap gap-4 justify-center">
+          <Link
+            href="/login"
+            className="group relative px-8 py-4 bg-white text-black font-bold uppercase tracking-widest text-sm hover:bg-green-500 transition-colors"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Enter Console
+            <div className="absolute -inset-1 bg-green-500 opacity-20 blur group-hover:opacity-60 transition-opacity" />
+          </Link>
+          <Link
+            href="/docs"
+            className="px-8 py-4 border border-white/10 hover:bg-white/5 font-bold uppercase tracking-widest text-sm transition-all"
           >
+            {/* <button className="px-8 py-4 border border-white/10 hover:bg-white/5 font-bold uppercase tracking-widest text-sm transition-all"> */}
             Documentation
-          </a>
+            {/* </button> */}
+          </Link>
         </div>
-      </main>
-    </div>
+      </div>
+
+      {/* Floating System Stats (Decorative) */}
+      <div className="absolute bottom-10 left-10 hidden lg:block text-[10px] font-mono text-slate-600 space-y-1">
+        <p>REGION: ASIA-SOUTH-1</p>
+        <p>LATENCY: 12ms</p>
+        <p>UPTIME: 99.998%</p>
+      </div>
+    </main>
   );
 }

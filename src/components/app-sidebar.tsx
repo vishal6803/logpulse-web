@@ -32,7 +32,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader className="p-4 group-data-[collapsible=icon]:p-2">
         <div className="flex items-center gap-2 font-bold text-xl tracking-tight">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500 text-white">
             <Activity className="h-5 w-5" />
           </div>
           <span className="group-data-[collapsible=icon]:hidden">LogPulse</span>

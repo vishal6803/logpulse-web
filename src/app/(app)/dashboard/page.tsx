@@ -29,7 +29,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"; // 🚨 NEW IMPORTS
+} from "@/components/ui/select";
 
 // --- MOCK DATA ---
 const errorTimelineData = [
@@ -69,15 +69,25 @@ const recentIssues = [
   },
 ];
 
+// NORTHERN LIGHTS CHART COLORS (Emerald and Cyan)
 const chartConfig = {
-  production: { label: "Production", color: "hsl(var(--chart-1))" },
-  staging: { label: "Staging", color: "hsl(var(--chart-2))" },
+  production: { label: "Production", color: "hsl(142, 71%, 45%)" },
+  staging: { label: "Staging", color: "hsl(180, 100%, 40%)" },
 };
+
+const glassCardClass =
+  "bg-background/50 backdrop-blur-xl border border-border/50 shadow-lg";
 
 export default function DashboardPage() {
   return (
-    <div className="flex flex-col gap-6">
-      {/* 🚨 UPDATED HEADER WITH TOGGLES 🚨 */}
+    <div className="relative min-h-screen flex flex-col gap-6">
+      {/* 🚨 NORTHERN LIGHTS AMBIENT GLOW 🚨 */}
+      <div className="fixed inset-0 -z-10 overflow-hidden bg-background">
+        <div className="absolute top-[-10%] left-[-10%] h-[50vh] w-[50vw] rounded-full bg-emerald-600/15 blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-5%] h-[60vh] w-[50vw] rounded-full bg-cyan-500/10 blur-[120px]" />
+        <div className="absolute top-[20%] left-[30%] h-[40vh] w-[40vw] rounded-full bg-teal-400/10 blur-[120px]" />
+      </div>
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Command Center</h1>
@@ -86,68 +96,65 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        {/* The Context Selectors */}
         <div className="flex items-center gap-2">
           <Select defaultValue="all-projects">
-            <SelectTrigger className="w-[200px] bg-background">
+            <SelectTrigger className={`w-[200px] ${glassCardClass}`}>
               <SelectValue placeholder="Select Project" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className={glassCardClass}>
               <SelectItem value="all-projects">All Projects</SelectItem>
               <SelectItem value="proj_1">E-Commerce Frontend</SelectItem>
               <SelectItem value="proj_2">Payment Gateway API</SelectItem>
-              <SelectItem value="proj_4">Mobile Client</SelectItem>
             </SelectContent>
           </Select>
 
           <Select defaultValue="production">
-            <SelectTrigger className="w-[140px] bg-background">
+            <SelectTrigger className={`w-[140px] ${glassCardClass}`}>
               <SelectValue placeholder="Environment" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className={glassCardClass}>
               <SelectItem value="all-envs">All Environments</SelectItem>
               <SelectItem value="production">Production</SelectItem>
               <SelectItem value="staging">Staging</SelectItem>
-              <SelectItem value="local">Local</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </div>
 
-      {/* TOP ROW: METRICS */}
+      {/* METRICS ROW */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card className={glassCardClass}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Total Errors (24h)
             </CardTitle>
-            <Bug className="h-4 w-4 text-muted-foreground" />
+            <Bug className="h-4 w-4 text-emerald-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">243</div>
             <p className="text-xs text-muted-foreground">+12% from yesterday</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className={glassCardClass}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Unresolved Issues
             </CardTitle>
-            <AlertTriangle className="h-4 w-4 text-red-500" />
+            <AlertTriangle className="h-4 w-4 text-amber-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-500">18</div>
+            <div className="text-2xl font-bold text-amber-500">18</div>
             <p className="text-xs text-muted-foreground">
               Requires immediate attention
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className={glassCardClass}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Affected Users
             </CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
+            <Activity className="h-4 w-4 text-cyan-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">1,204</div>
@@ -156,22 +163,21 @@ export default function DashboardPage() {
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className={glassCardClass}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">System Health</CardTitle>
-            <Terminal className="h-4 w-4 text-muted-foreground" />
+            <Terminal className="h-4 w-4 text-teal-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-emerald-500">99.9%</div>
+            <div className="text-2xl font-bold text-teal-500">99.9%</div>
             <p className="text-xs text-muted-foreground">Uptime API Status</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* MIDDLE ROW: CHARTS & LOGS */}
+      {/* CHARTS & FEED ROW */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        {/* MAIN CHART */}
-        <Card className="col-span-4 lg:col-span-5">
+        <Card className={`col-span-4 lg:col-span-5 ${glassCardClass}`}>
           <CardHeader>
             <CardTitle>Error Frequency</CardTitle>
             <CardDescription>
@@ -189,24 +195,24 @@ export default function DashboardPage() {
                     <linearGradient id="colorProd" x1="0" y1="0" x2="0" y2="1">
                       <stop
                         offset="5%"
-                        stopColor="hsl(var(--chart-1))"
-                        stopOpacity={0.3}
+                        stopColor={chartConfig.production.color}
+                        stopOpacity={0.4}
                       />
                       <stop
                         offset="95%"
-                        stopColor="hsl(var(--chart-1))"
+                        stopColor={chartConfig.production.color}
                         stopOpacity={0}
                       />
                     </linearGradient>
                     <linearGradient id="colorStage" x1="0" y1="0" x2="0" y2="1">
                       <stop
                         offset="5%"
-                        stopColor="hsl(var(--chart-2))"
-                        stopOpacity={0.3}
+                        stopColor={chartConfig.staging.color}
+                        stopOpacity={0.4}
                       />
                       <stop
                         offset="95%"
-                        stopColor="hsl(var(--chart-2))"
+                        stopColor={chartConfig.staging.color}
                         stopOpacity={0}
                       />
                     </linearGradient>
@@ -215,6 +221,7 @@ export default function DashboardPage() {
                     strokeDasharray="3 3"
                     vertical={false}
                     stroke="hsl(var(--border))"
+                    strokeOpacity={0.4}
                   />
                   <XAxis
                     dataKey="time"
@@ -233,7 +240,7 @@ export default function DashboardPage() {
                   <Area
                     type="monotone"
                     dataKey="production"
-                    stroke="hsl(var(--chart-1))"
+                    stroke={chartConfig.production.color}
                     strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#colorProd)"
@@ -241,7 +248,7 @@ export default function DashboardPage() {
                   <Area
                     type="monotone"
                     dataKey="staging"
-                    stroke="hsl(var(--chart-2))"
+                    stroke={chartConfig.staging.color}
                     strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#colorStage)"
@@ -252,8 +259,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        {/* RECENT ISSUES FEED */}
-        <Card className="col-span-4 lg:col-span-2">
+        <Card className={`col-span-4 lg:col-span-2 ${glassCardClass}`}>
           <CardHeader>
             <CardTitle>Recent Anomalies</CardTitle>
             <CardDescription>
@@ -264,10 +270,10 @@ export default function DashboardPage() {
             {recentIssues.map((issue) => (
               <div
                 key={issue.id}
-                className="flex flex-col border-b pb-3 last:border-0 last:pb-0"
+                className="flex flex-col border-b border-border/50 pb-3 last:border-0 last:pb-0"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-red-500 dark:text-red-400 truncate w-[180px]">
+                  <span className="text-sm font-semibold text-emerald-500 dark:text-emerald-400 truncate w-[180px]">
                     {issue.message}
                   </span>
                   <span className="text-xs text-muted-foreground">
@@ -275,7 +281,7 @@ export default function DashboardPage() {
                   </span>
                 </div>
                 <div className="mt-1 flex items-center gap-2">
-                  <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+                  <span className="inline-flex items-center rounded-full border border-border/50 px-2.5 py-0.5 text-xs font-semibold bg-background/50 backdrop-blur-sm">
                     {issue.env}
                   </span>
                   <span className="text-xs text-muted-foreground">
