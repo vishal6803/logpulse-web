@@ -30,6 +30,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import useGetProjectsWithEnvList from "@/hooks/queries/useGetProjectsWithEnvList";
+import { useEffect, useMemo, useState } from "react";
 
 // --- MOCK DATA ---
 const errorTimelineData = [
@@ -79,6 +81,43 @@ const glassCardClass =
   "bg-background/50 backdrop-blur-xl border border-border/50 shadow-lg";
 
 export default function DashboardPage() {
+  const {
+    data: projectsWithEnvList,
+    isLoading,
+    isError,
+  } = useGetProjectsWithEnvList();
+  // States
+  const [selectedProject, setSelectedProject] =
+    useState<string>("all-projects");
+  const [selectedEnvironment, setSelectedEnvironment] =
+    useState<string>("all-envs");
+
+  // 1. Logic: Auto-select first project on load
+  const projects = projectsWithEnvList?.data?.projects || [];
+
+  useEffect(() => {
+    if (projects.length > 0 && selectedProject === "all-projects") {
+      setSelectedProject(projects[0].id);
+    }
+  }, [projects, selectedProject]);
+
+  // 2. Logic: Get environments for the currently selected project
+  const currentProjectEnvs = useMemo(() => {
+    return projects.find((p) => p.id === selectedProject)?.environments || [];
+  }, [projects, selectedProject]);
+
+  // 3. Handlers
+  const handleProjectChange = (id: string) => {
+    setSelectedProject(id);
+    setSelectedEnvironment("all-envs"); // Reset env when project changes
+  };
+
+  if (isLoading)
+    return (
+      <div className="p-10 text-emerald-500 animate-pulse">
+        Initializing Command Center...
+      </div>
+    );
   return (
     <div className="relative min-h-screen flex flex-col gap-6">
       {/* 🚨 NORTHERN LIGHTS AMBIENT GLOW 🚨 */}
@@ -97,25 +136,36 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Select defaultValue="all-projects">
+          <Select value={selectedProject} onValueChange={handleProjectChange}>
             <SelectTrigger className={`w-[200px] ${glassCardClass}`}>
               <SelectValue placeholder="Select Project" />
             </SelectTrigger>
             <SelectContent className={glassCardClass}>
               <SelectItem value="all-projects">All Projects</SelectItem>
-              <SelectItem value="proj_1">E-Commerce Frontend</SelectItem>
-              <SelectItem value="proj_2">Payment Gateway API</SelectItem>
+              {projects.map((project) => (
+                <SelectItem key={project.id} value={project.id}>
+                  {project.name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
-          <Select defaultValue="production">
-            <SelectTrigger className={`w-[140px] ${glassCardClass}`}>
+          {/* ENVIRONMENT SELECT */}
+          <Select
+            value={selectedEnvironment}
+            onValueChange={setSelectedEnvironment}
+            disabled={selectedProject === "all-projects"}
+          >
+            <SelectTrigger className={`w-[160px] ${glassCardClass}`}>
               <SelectValue placeholder="Environment" />
             </SelectTrigger>
             <SelectContent className={glassCardClass}>
               <SelectItem value="all-envs">All Environments</SelectItem>
-              <SelectItem value="production">Production</SelectItem>
-              <SelectItem value="staging">Staging</SelectItem>
+              {currentProjectEnvs.map((env) => (
+                <SelectItem key={env.id} value={env.id}>
+                  {env.name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

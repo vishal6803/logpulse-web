@@ -2,25 +2,25 @@
 import { useState } from "react";
 import Link from "next/link";
 import { LogIn, Mail, Lock } from "lucide-react";
+import useLoginUser from "@/hooks/mutations/useLoginUser";
+import { useRouter } from "next/navigation";
+import { SuccessResponse } from "@/hooks/mutations/useCreateUser";
 
 export default function LoginPage() {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
-
+  const router = useRouter();
+  const { mutateAsync } = useLoginUser();
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch("https://api.uselogpulse.tech/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(credentials),
-    });
 
-    const data = await res.json();
-
-    if (data.token) {
-      localStorage.setItem("lp_token", data.token); // Store JWT for later requests
-      window.location.href = "/dashboard";
-    } else {
-      alert("Unauthorized: Check your credentials.");
+    try {
+      const res = await mutateAsync(credentials);
+      const { success } = res as SuccessResponse;
+      if (success) {
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
     }
   };
 
